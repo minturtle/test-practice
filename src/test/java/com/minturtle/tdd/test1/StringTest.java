@@ -2,6 +2,8 @@ package com.minturtle.tdd.test1;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -50,7 +52,7 @@ public class StringTest {
         - JUnit의 @DisplayName을 활용해 테스트 메소드의 의도를 드러낸다.
     * */
     @Test
-    @DisplayName("charAt Test")
+    @DisplayName("charAt Test-IndexOutOfBoundsException 예외 발생")
     void t3() throws Exception {
         //given
         String testString = "abc";
@@ -59,5 +61,20 @@ public class StringTest {
         assertThatThrownBy(()->testString.charAt(testString.length()))
                 .isInstanceOf(StringIndexOutOfBoundsException.class);
 
+    }
+
+
+    /*
+    요구사항 4
+        - charAt을 사용해 문자열 abc의 문자들의 각 위치를 정확히 리턴하는지 테스트한다.
+        - @ParameterizedTest를 사용한다.
+    * */
+    @ParameterizedTest
+    @DisplayName("charAt- 정확한 위치")
+    @CsvSource(value = {"0,a", "1,b", "2,c"})
+    void t4(int idx, char testChar){
+        String testString = "abc";
+
+        assertThat(testString.charAt(idx)).isEqualTo(testChar);
     }
 }
