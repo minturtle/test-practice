@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
@@ -113,5 +114,13 @@ class StringCalculatorTest {
         int actual = cal.evaluate(expression);
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @DisplayName("잘못된 식 입력")
+    @ValueSource(strings = {"1+", "+5/2"})
+    void t7(String expression){
+        assertThatThrownBy(()->cal.evaluate(expression))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

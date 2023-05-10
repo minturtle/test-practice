@@ -1,6 +1,7 @@
 package com.minturtle.tdd.calculator;
 
 import java.util.Arrays;
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Stack;
 
@@ -20,6 +21,14 @@ public class StringCalculator {
     }
 
     public int evaluate(String expression) {
+        try{
+            return evaluateBizLogic(expression);
+        }catch (EmptyStackException e){
+            throw new IllegalArgumentException("잘못된 표현식입니다.", e);
+        }
+    }
+
+    private int evaluateBizLogic(String expression){
         initializeStacks();
 
         final List<Character> tokens = splitString(expression);
@@ -71,6 +80,9 @@ public class StringCalculator {
                 throw new IllegalArgumentException("Invalid operator: " + operator);
         }
     }
+
+
+
 
 
     private List<Character> splitString(String expression){
