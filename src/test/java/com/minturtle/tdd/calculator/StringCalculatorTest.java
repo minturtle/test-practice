@@ -1,5 +1,6 @@
 package com.minturtle.tdd.calculator;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,12 +10,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 import static org.assertj.core.api.Assertions.*;
 
-
+@Slf4j
 class StringCalculatorTest {
-
 
     private StringCalculator cal;
     @BeforeEach
@@ -35,14 +36,16 @@ class StringCalculatorTest {
     @CsvSource(value = {"1+2:1,+,2", "1+3/2+1:1,+,3,/,2,+,1", "1 + 4:1,+,4"}, delimiter = ':')
     void t2(String testString, String resultListPlaneString) throws Exception {
         //given
-        List<String> expectedValues = Arrays.stream(resultListPlaneString.split(",")).toList();
+        List<Character> expectedValues = Arrays.stream(resultListPlaneString.split(",")).map(s->s.charAt(0)).toList();
 
         //when
 
-        List<String> actualValues = (List<String>) ReflectionTestUtils.invokeMethod(cal, "splitString", testString);
+        List<Character> actualValues = (List<Character>) ReflectionTestUtils.invokeMethod(cal, "splitString", testString);
 
         boolean testResult1 = actualValues.containsAll(expectedValues);
         boolean testResult2 = expectedValues.containsAll(actualValues);
+
+        log.info("expected : {}, actual : {}", expectedValues, actualValues);
         //then
         assertThat(testResult1).isTrue();
         assertThat(testResult2).isTrue();
@@ -57,6 +60,8 @@ class StringCalculatorTest {
 
         //when
         boolean actual = (boolean) ReflectionTestUtils.invokeMethod(cal, "isOperator", testToken);
+
+        log.info("token : {}, expected : {}, actual : {}", testToken, expected, actual);
         //then
         assertThat(actual).isEqualTo(expected);
     }
@@ -70,7 +75,33 @@ class StringCalculatorTest {
         assertThatThrownBy(()->{
                 boolean value = (boolean) ReflectionTestUtils.invokeMethod(cal, "isOperator", testToken);})
                 .isInstanceOf(IllegalArgumentException.class);
-
     }
 
+
+    @ParameterizedTest
+    @DisplayName("스택에 연산자/ 피연산자 구분해 값을 넣기")
+    @CsvSource(value = {"1+2/3:1,2,3@+,/", "4 * 5 - 6:4,5,6@*,-"}, delimiter = ':')
+    void t5(String expression, String tokenPlaneString) throws Exception {
+        //given
+        String[] tokens = tokenPlaneString.split("@");
+        final List<Integer> expectedOperands = Arrays.stream(tokens[0].split(",")).mapToInt(Integer::parseInt).boxed().toList();
+        final List<Character> expectedOperators = Arrays.stream(tokens[1].split(",")).map(s->s.charAt(0)).toList();
+
+        ReflectionTestUtils.invokeMethod(cal, "setStack", expression);
+
+        //when
+        Stack<Character> operatorStack = (Stack<Character>) ReflectionTestUtils.getField(cal, "operatorStack");
+        Stack<Integer> operandStack = (Stack<Integer>) ReflectionTestUtils.getField(cal, "operandStack");
+
+        log.info("expected operator: {}, actual operand : {}", expectedOperators, operatorStack);
+        log.info("expected operand: {}, actual operand : {}", expectedOperands, operandStack);
+        //then
+
+        boolean operatorTestResult = operatorStack.containsAll(expectedOperators);
+        boolean operandTestResult = operandStack.containsAll(expectedOperands);
+
+        assertThat(operatorTestResult).isTrue();
+        assertThat(operandTestResult).isTrue();
+
+    }
 }
