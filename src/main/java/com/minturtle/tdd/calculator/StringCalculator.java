@@ -24,7 +24,7 @@ public class StringCalculator {
         try{
             return evaluateBizLogic(expression);
         }catch (EmptyStackException e){
-            throw new IllegalArgumentException("잘못된 표현식입니다.", e);
+            throw new IllegalArgumentException("잘못된 입력입니다.", e);
         }
     }
 
@@ -100,16 +100,6 @@ public class StringCalculator {
         if(token >= '0' && token <= '9') return false;
 
         throw new IllegalArgumentException();
-    }
-
-    private void setStack(String expression){
-        List<Character> tokens = splitString(expression);
-
-        for(Character token : tokens){
-            if(isOperator(token)) operatorStack.push(token);
-            else operandStack.push((int)(token - '0'));
-        }
-
     }
 
     private int precedence(char operator) {

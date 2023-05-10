@@ -2,6 +2,7 @@ package com.minturtle.tdd.calculator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -79,6 +80,7 @@ class StringCalculatorTest {
     }
 
 
+    @Disabled
     @ParameterizedTest
     @DisplayName("스택에 연산자/ 피연산자 구분해 값을 넣기")
     @CsvSource(value = {"1+2/3:1,2,3@+,/", "4 * 5 - 6:4,5,6@*,-", "(7+8):7,8@(,+,)"}, delimiter = ':')
