@@ -33,7 +33,7 @@ class StringCalculatorTest {
 
     @ParameterizedTest
     @DisplayName("문자열 split")
-    @CsvSource(value = {"1+2:1,+,2", "1+3/2+1:1,+,3,/,2,+,1", "1 + 4:1,+,4"}, delimiter = ':')
+    @CsvSource(value = {"1+2:1,+,2", "1+3/2+1:1,+,3,/,2,+,1", "1 + 4:1,+,4", "(3+4):(,3,+,4,)"}, delimiter = ':')
     void t2(String testString, String resultListPlaneString) throws Exception {
         //given
         List<Character> expectedValues = Arrays.stream(resultListPlaneString.split(",")).map(s->s.charAt(0)).toList();
@@ -54,7 +54,7 @@ class StringCalculatorTest {
 
     @ParameterizedTest
     @DisplayName("연산자/ 피연산자 분류")
-    @CsvSource(value = {"1,false" , "+,true", "5,false", "-,true", "*,true", "/,true", "3,false"})
+    @CsvSource(value = {"1,false" , "+,true", "5,false", "-,true", "*,true", "/,true", "3,false", "(,true", "),true"})
     void t3(char testToken, boolean expected) throws Exception {
         //given
 
@@ -80,7 +80,7 @@ class StringCalculatorTest {
 
     @ParameterizedTest
     @DisplayName("스택에 연산자/ 피연산자 구분해 값을 넣기")
-    @CsvSource(value = {"1+2/3:1,2,3@+,/", "4 * 5 - 6:4,5,6@*,-"}, delimiter = ':')
+    @CsvSource(value = {"1+2/3:1,2,3@+,/", "4 * 5 - 6:4,5,6@*,-", "(7+8):7,8@(,+,)"}, delimiter = ':')
     void t5(String expression, String tokenPlaneString) throws Exception {
         //given
         String[] tokens = tokenPlaneString.split("@");
@@ -103,5 +103,15 @@ class StringCalculatorTest {
         assertThat(operatorTestResult).isTrue();
         assertThat(operandTestResult).isTrue();
 
+    }
+
+
+    @ParameterizedTest
+    @DisplayName("중위 표현식 계산")
+    @CsvSource(value = {"1+2,3", "(4 * 6) / 3, 8", "4 * (6 + 3) , 36"})
+    void t6(String expression, int expected){
+        int actual = cal.evaluate(expression);
+
+        assertThat(actual).isEqualTo(expected);
     }
 }
