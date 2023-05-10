@@ -49,6 +49,16 @@ class StringCalculatorTest {
     }
 
 
+    @ParameterizedTest
+    @DisplayName("연산자/ 피연산자 분류")
+    @CsvSource(value = {"1,false" , "+,true", "5,false", "-,true", "*,true", "/,true", "3,false"})
+    void t3(char testToken, boolean expected) throws Exception {
+        //given
 
+        //when
+        boolean actual = (boolean) ReflectionTestUtils.invokeMethod(cal, "isOperator", testToken);
+        //then
+        assertThat(actual).isEqualTo(expected);
+    }
 
 }

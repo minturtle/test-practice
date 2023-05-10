@@ -10,10 +10,14 @@ public class StringCalculator {
     }
 
 
-    private boolean isOperator(String token){
+    private boolean isOperator(char token){
+        char[] operators = {'+', '-', '*', '/'};
 
+        for(char operator : operators){
+            if(token == operator) return true;
+        }
 
-
+        return false;
     }
 
 
