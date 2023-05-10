@@ -61,4 +61,16 @@ class StringCalculatorTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
+    @DisplayName("연산자, 피연산자 분류 시 잘못된 값이 들어왔을때 예외 발생")
+    void t4() throws Exception {
+        //given
+        char testToken = 'a';
+        //then
+        assertThatThrownBy(()->{
+                boolean value = (boolean) ReflectionTestUtils.invokeMethod(cal, "isOperator", testToken);})
+                .isInstanceOf(IllegalArgumentException.class);
+
+    }
+
 }

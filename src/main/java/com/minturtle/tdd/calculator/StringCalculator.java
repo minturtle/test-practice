@@ -10,14 +10,17 @@ public class StringCalculator {
     }
 
 
-    private boolean isOperator(char token){
+    private boolean isOperator(char token) throws IllegalArgumentException{
         char[] operators = {'+', '-', '*', '/'};
 
         for(char operator : operators){
             if(token == operator) return true;
         }
 
-        return false;
+        if(token >= '0' && token <= '9') return false;
+
+
+        throw new IllegalArgumentException();
     }
 
 
