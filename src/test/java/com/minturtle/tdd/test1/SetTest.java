@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashSet;
@@ -53,5 +54,16 @@ public class SetTest {
         assertThat(numbers).contains(testNumber);
         assertThat(numbers).containsExactly(1, 2, 3);
     }
-    
+
+    // 요구사항 3
+    // 요구사항 2는 contains 메소드 결과 값이 true인 경우만 테스트 가능하다. 입력 값에 따라 결과 값이 다른 경우에 대한 테스트도 가능하도록 구현한다.
+    // 예를 들어 1, 2, 3 값은 contains 메소드 실행결과 true, 4, 5 값을 넣으면 false 가 반환되는 테스트를 하나의 Test Case로 구현한다.
+    @ParameterizedTest
+    @DisplayName("set contain_number test : True, False를 옳게 리턴하는지 테스트")
+    @CsvSource(value = {"1:true","2:true","3:true","4:false","5:false"}, delimiter = ':')
+    void t3(int testNumber, boolean expected){
+        boolean actual = numbers.contains(testNumber);
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }
