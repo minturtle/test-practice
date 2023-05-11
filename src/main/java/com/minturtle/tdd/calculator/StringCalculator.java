@@ -4,17 +4,15 @@ import java.util.*;
 
 public class StringCalculator {
 
+    private final StringUtils stringUtils;
+
+    public StringCalculator(StringUtils stringUtils) {
+        this.stringUtils = stringUtils;
+    }
+
     private Stack<Integer> operandStack;
     private Stack<Character> operatorStack;
 
-    public StringCalculator() {
-        initializeStacks();
-    }
-
-    private void initializeStacks() {
-        operandStack = new Stack<>();
-        operatorStack = new Stack<>();
-    }
 
     public int evaluate(String expression) {
         try{
@@ -27,8 +25,11 @@ public class StringCalculator {
     private int evaluateBizLogic(String expression){
         initializeStacks();
 
-        final List<Character> tokens = splitString(expression);
-
+        // 문자열에서 연산자와 피연산자 분류
+        List<Character> tokens = stringUtils.splitString(expression);
+        
+        
+        // 계산 수행
         for (char token : tokens) {
             if (token == '(') {
                 operatorStack.push(token);
@@ -38,8 +39,8 @@ public class StringCalculator {
                     operandStack.push(result);
                 }
                 operatorStack.pop(); // remove '('
-            } else if (isOperator(token)) {
-                while (!operatorStack.isEmpty() && precedence(operatorStack.peek()) >= precedence(token)) {
+            } else if (stringUtils.isOperator(token)) {
+                while (!operatorStack.isEmpty() && getPrecedence(operatorStack.peek()) >= getPrecedence(token)) {
                     int result = applyOperatorFromStack();
                     operandStack.push(result);
                 }
@@ -57,6 +58,10 @@ public class StringCalculator {
         return operandStack.pop();
     }
 
+    private void initializeStacks() {
+        operandStack = new Stack<>();
+        operatorStack = new Stack<>();
+    }
 
     private int applyOperatorFromStack() {
         int rightOperand = operandStack.pop();
@@ -78,27 +83,7 @@ public class StringCalculator {
     }
 
 
-
-
-
-    private List<Character> splitString(String expression){
-        return Arrays.stream(expression.split("")).map(s->s.charAt(0)).filter(c->c != ' ').toList();
-    }
-
-
-    private boolean isOperator(char token) throws IllegalArgumentException{
-        char[] operators = {'+', '-', '*', '/', '(', ')'};
-
-        for(char operator : operators){
-            if(token == operator) return true;
-        }
-
-        if(token >= '0' && token <= '9') return false;
-
-        throw new IllegalArgumentException();
-    }
-
-    private int precedence(char operator) {
+    private int getPrecedence(char operator) {
         switch (operator) {
             case '+':
             case '-':

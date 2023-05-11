@@ -20,9 +20,12 @@ import static org.assertj.core.api.Assertions.*;
 class StringCalculatorTest {
 
     private StringCalculator cal;
+    private StringUtils stringUtils;
+
     @BeforeEach
     void setUp() {
-        cal = new StringCalculator();
+        stringUtils = new StringUtils();
+        cal = new StringCalculator(stringUtils);
     }
 
 
@@ -42,7 +45,7 @@ class StringCalculatorTest {
 
         //when
 
-        List<Character> actualValues = (List<Character>) ReflectionTestUtils.invokeMethod(cal, "splitString", testString);
+        List<Character> actualValues = (List<Character>) ReflectionTestUtils.invokeMethod(stringUtils, "splitString", testString);
 
         boolean testResult1 = actualValues.containsAll(expectedValues);
         boolean testResult2 = expectedValues.containsAll(actualValues);
@@ -61,22 +64,21 @@ class StringCalculatorTest {
         //given
 
         //when
-        boolean actual = (boolean) ReflectionTestUtils.invokeMethod(cal, "isOperator", testToken);
+        boolean actual = (boolean) ReflectionTestUtils.invokeMethod(stringUtils, "isOperator", testToken);
 
         log.info("token : {}, expected : {}, actual : {}", testToken, expected, actual);
         //then
         assertThat(actual).isEqualTo(expected);
     }
 
-    @Test
+    @ParameterizedTest
     @DisplayName("연산자, 피연산자 분류 시 잘못된 값이 들어왔을때 예외 발생")
-    void t4() throws Exception {
-        //given
-        char testToken = 'a';
+    @CsvSource(value = {"a,false" , "+,true", "C,false", "-,true", "*,true", "/,true", "&,false", "(,true", "),true"})
+    void t4(char testToken, boolean expected) throws Exception {
         //then
-        assertThatThrownBy(()->{
-                boolean value = (boolean) ReflectionTestUtils.invokeMethod(cal, "isOperator", testToken);})
-                .isInstanceOf(IllegalArgumentException.class);
+        boolean actual = (boolean) ReflectionTestUtils.invokeMethod(stringUtils, "isAvailableToken", testToken);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
 

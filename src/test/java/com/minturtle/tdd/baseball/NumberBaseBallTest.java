@@ -19,12 +19,10 @@ class NumberBaseBallTest {
 
     }
 
-
     @Test
     @DisplayName("game 객체 생성")
     void t1() throws Exception {
         //then
         assertThat(game).isNotNull();
-
     }
 }
