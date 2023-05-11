@@ -1,12 +1,8 @@
 package com.minturtle.tdd.calculator;
 
-import java.util.Arrays;
-import java.util.EmptyStackException;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class StringCalculator {
-
 
     private Stack<Integer> operandStack;
     private Stack<Character> operatorStack;

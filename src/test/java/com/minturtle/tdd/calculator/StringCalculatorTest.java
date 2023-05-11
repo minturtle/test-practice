@@ -115,6 +115,8 @@ class StringCalculatorTest {
     void t6(String expression, int expected){
         int actual = cal.evaluate(expression);
 
+
+        log.info("expression : {}, expected : {}, actual : {}", expression, expected, actual);
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -124,5 +126,7 @@ class StringCalculatorTest {
     void t7(String expression){
         assertThatThrownBy(()->cal.evaluate(expression))
                 .isInstanceOf(IllegalArgumentException.class);
+
+        log.info("IllegalArgumentException occured");
     }
 }
