@@ -60,5 +60,17 @@ class NumberBaseBallTest {
         assertThat(listSize).isEqualTo(setSize);
      }
 
+    @RepeatedTest(100)
+    @DisplayName("숫자의 범위를 1~9까지로 제한")
+    void t5() throws Exception {
+        List<Integer> randomNumbers = (List<Integer>) ReflectionTestUtils.invokeMethod(game, "getRandomNumbers");
 
+        assertThatCode(() -> {
+            for(int randomNumber : randomNumbers){
+                if(randomNumber <= 0 || randomNumber >= 10) throw new IllegalStateException();
+            }
+        }).doesNotThrowAnyException();
+
+
+    }
 }
