@@ -10,8 +10,20 @@ e.g. 상대방(컴퓨터)의 수가 425일 때, 123을 제시한 경우 : 1스�
 * */
 
 
+import java.util.*;
+
 public class NumberBaseBall {
 
+    private List<Integer> getRandomNumbers(){
+        Set<Integer> numbers = new HashSet<>();
+        Random random = new Random();
 
+        while (numbers.size() < 3) {
+            int randomNumber = random.nextInt(9) + 1;
+            numbers.add(randomNumber);
+        }
+
+        return Collections.unmodifiableList(numbers.stream().toList());
+    }
 
 }
