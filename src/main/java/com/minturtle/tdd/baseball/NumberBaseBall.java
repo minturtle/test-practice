@@ -10,9 +10,46 @@ e.g. 상대방(컴퓨터)의 수가 425일 때, 123을 제시한 경우 : 1스�
 * */
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.*;
 
 public class NumberBaseBall {
+
+
+    private List<Integer> randomNumbers;
+    private int trial = 0;
+
+    public NumberBaseBall() {
+        randomNumbers = getRandomNumbers();
+    }
+
+
+
+    //매개변수로 List를 사용하지 않은 이유? 숫자를 3개로 제한하기 위해
+    public Result play(int n1, int n2, int n3){
+        trial++;
+        int strike = 0;
+        int ball = 0;
+
+        int[] trials = new int[]{n1, n2, n3};
+
+
+        for(int i = 0; i < trials.length; i++){
+            int trial = trials[i];
+
+            // 정확한 위치에 정확한 숫자 -> strike
+            if(trial == randomNumbers.get(i)) strike++;
+            // strike는 아니지만 숫자 리스트 중에 trial이 있음 -> ball
+            else if(randomNumbers.contains(trial)) ball++;
+
+        }
+
+
+        return new Result(strike, ball);
+    }
+
 
     private List<Integer> getRandomNumbers(){
         Set<Integer> numbers = new HashSet<>();
@@ -26,4 +63,15 @@ public class NumberBaseBall {
         return Collections.unmodifiableList(numbers.stream().toList());
     }
 
+
+    @Getter
+    @AllArgsConstructor
+    public static class Result{
+        private int strike;
+        private int ball;
+
+        public boolean isNothing(){
+            return (strike == 0) && (ball == 0);
+        }
+    }
 }
