@@ -56,6 +56,10 @@ public class NumberBaseBall {
         initializeGame();
     }
 
+    public int getTrial() {
+        return trial;
+    }
+
     private List<Integer> getRandomNumbers(){
         Set<Integer> numbers = new HashSet<>();
         Random random = new Random();
@@ -83,6 +87,19 @@ public class NumberBaseBall {
 
         public boolean isNothing(){
             return (strike == 0) && (ball == 0);
+        }
+
+        public boolean isGameEnd(){
+            return (strike == 3);
+
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "strike=" + strike +
+                    ", ball=" + ball +
+                    '}';
         }
     }
 }
