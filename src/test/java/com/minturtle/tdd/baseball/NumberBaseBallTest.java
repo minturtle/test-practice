@@ -68,11 +68,9 @@ class NumberBaseBallTest {
     void t5() throws Exception {
         List<Integer> randomNumbers = (List<Integer>) ReflectionTestUtils.invokeMethod(game, "getRandomNumbers");
 
-        assertThatCode(() -> {
-            for(int randomNumber : randomNumbers){
-                if(randomNumber <= 0 || randomNumber >= 10) throw new IllegalStateException();
-            }
-        }).doesNotThrowAnyException();
+        for(int randomNumber : randomNumbers){
+            if(randomNumber <= 0 || randomNumber >= 10) fail("숫자가 범위를 벗어났습니다.");
+        }
 
     }
 
