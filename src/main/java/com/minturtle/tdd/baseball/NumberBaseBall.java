@@ -42,9 +42,10 @@ public class NumberBaseBall {
             int trial = trials[i];
 
             // 정확한 위치에 정확한 숫자 -> strike
-            if(trial == randomNumbers.get(i)) strike++;
+            strike += strikeCount(trial, randomNumbers.get(i));
+
             // strike는 아니지만 숫자 리스트 중에 trial이 있음 -> ball
-            else if(randomNumbers.contains(trial)) ball++;
+            ball += ballCount(trial, randomNumbers.get(i));
 
         }
 
@@ -78,6 +79,19 @@ public class NumberBaseBall {
         randomNumbers = getRandomNumbers();
     }
 
+    private int strikeCount(int userNumber, int computerNumber){
+        if (userNumber == computerNumber) return 1;
+
+        return 0;
+    }
+
+    private int ballCount(int userNumber, int computerNumber){
+        // strike 시 패스
+        if (userNumber == computerNumber) return 0;
+        // ball 인 경우
+        if(randomNumbers.contains(userNumber)) return 1;
+        return 0;
+    }
 
     @Getter
     @AllArgsConstructor
