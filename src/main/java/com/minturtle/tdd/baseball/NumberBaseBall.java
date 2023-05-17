@@ -12,20 +12,22 @@ e.g. 상대방(컴퓨터)의 수가 425일 때, 123을 제시한 경우 : 1스�
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+
+@Component
 public class NumberBaseBall {
 
 
     private List<Integer> randomNumbers;
-    private int trial = 0;
+    private int trial;
 
     public NumberBaseBall() {
-        randomNumbers = getRandomNumbers();
+
+        initializeGame();
     }
-
-
 
     //매개변수로 List를 사용하지 않은 이유? 숫자를 3개로 제한하기 위해
     public Result play(int n1, int n2, int n3){
@@ -50,6 +52,9 @@ public class NumberBaseBall {
         return new Result(strike, ball);
     }
 
+    public void restart(){
+        initializeGame();
+    }
 
     private List<Integer> getRandomNumbers(){
         Set<Integer> numbers = new HashSet<>();
@@ -61,6 +66,12 @@ public class NumberBaseBall {
         }
 
         return Collections.unmodifiableList(numbers.stream().toList());
+    }
+
+
+    private void initializeGame() {
+        trial = 0;
+        randomNumbers = getRandomNumbers();
     }
 
 

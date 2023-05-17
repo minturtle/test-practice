@@ -153,7 +153,21 @@ class NumberBaseBallTest {
         assertThat(actualResult.getStrike()).isEqualTo(expectedStrike);
         assertThat(actualResult.getBall()).isEqualTo(expectedBall);
         assertThat(actualResult.isNothing()).isEqualTo(expectedNothing);
+    }
 
 
+    @Test
+    @DisplayName("재시작 시 초기화")
+    void t11() throws Exception {
+        //given
+        game.play(1,2,3);
+        Integer beforeTrial = (Integer) ReflectionTestUtils.getField(game, "trial");
+
+        //when
+        game.restart();
+        Integer afterTrial = (Integer) ReflectionTestUtils.getField(game, "trial");
+        //then
+        assertThat(beforeTrial).isEqualTo(1);
+        assertThat(afterTrial).isEqualTo(0);
     }
 }
